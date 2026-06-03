@@ -1,0 +1,35 @@
+`include "constants.vams"
+`include "disciplines.vams"
+
+module sc_integrator(vin, clk, vout);
+    input vin, clk;
+    output vout;
+    electrical vin, clk, vout;
+
+    real state;
+    real noise;
+    integer seed;   // REQUIRED for randomness
+
+    // Changed to 'parameter real' and set to IDEAL values
+    // These will now show up in your Cadence ADE Variables list!
+    parameter real alpha = 1.0;       // IDEAL: Perfect gain (no capacitor mismatch)
+    parameter real lambda = 0.0;      // IDEAL: Infinite Op-Amp DC gain (no leakage)
+    parameter real noise_std = 0;   // IDEAL: Zero thermal noise
+
+    analog begin
+        @(initial_step) begin
+            state = 0.0;
+            seed = 12345;       // seed initialization
+        end
+
+        @(cross(V(clk)-0.5, -1)) begin
+            // Calculates Gaussian noise (Will equal exactly 0 in ideal case)
+            noise = noise_std * $rdist_normal(seed, 0, 1);
+
+            // Ideal math: state = state + V(vin)
+            state = (1-lambda)*state + alpha*V(vin) + noise;
+        end
+
+        V(vout) <+ transition(state, 0, 1n, 1n);
+    end
+endmodule
