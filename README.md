@@ -130,13 +130,16 @@ The ideal implementation successfully demonstrates first-order quantization nois
 
 ## Authors
 
-**Rithwik D**
-Department of Electronics and Communication Engineering
-National Institute of Technology Calicut
+### Rithwik D
 
-**Devesh K Bharathraj**
-Department of Electronics and Communication Engineering
-National Institute of Technology Calicut
+*Department of Electrical and Electronics Engineering*
+*National Institute of Technology Calicut*
+
+### Devesh K Bharathraj
+
+*Department of Electronics and Communication Engineering*
+*National Institute of Technology Calicut*
+
 
 ---
 
