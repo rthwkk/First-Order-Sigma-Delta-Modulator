@@ -1,0 +1,13 @@
+`include "constants.vams"
+`include "disciplines.vams"
+
+module vdifferencer(vin_p, vin_n, vout);
+    input vin_p, vin_n;
+    output vout;
+    electrical vin_p, vin_n, vout;
+
+    analog begin
+        // Continuously output the difference
+        V(vout) <+ V(vin_p) - V(vin_n);
+    end
+endmodule
