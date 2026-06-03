@@ -1,0 +1,34 @@
+`include "constants.vams"
+`include "disciplines.vams"
+
+module latched_comparator(vin, clk, vout_dig);
+    input vin, clk;
+    output vout_dig;
+    electrical vin, clk, vout_dig;
+
+    // --- IDEAL PARAMETERS EXPOSED TO ADE ---
+    parameter real Voffset = 0.050;  // IDEAL: Perfect 0V threshold, no mismatch
+    parameter real tt = 10p;       // IDEAL: Razor-sharp 10ps rise/fall time
+
+    real dig_state;
+
+    analog begin
+        @(initial_step) begin
+            dig_state  = 0.0;
+        end
+
+        // Rising edge of clock
+        @(cross(V(clk) - 0.5, +1)) begin
+            // IDEAL: Evaluate the CURRENT input instantly against the offset.
+            // The 1-clock-cycle "prev_sample" latency (Excess Loop Delay) has been completely removed!
+            if (V(vin) > Voffset) begin
+                dig_state = 1.0;
+            end else begin
+                dig_state = 0.0;
+            end
+        end
+
+        // Output the perfectly sharp digital step
+        V(vout_dig) <+ transition(dig_state, 0, tt, tt);
+    end
+endmodule
